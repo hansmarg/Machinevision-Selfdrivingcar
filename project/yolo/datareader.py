@@ -170,11 +170,10 @@ def frames2data(img, data, grid_size, anchors):
 def csv2data(filepath, grid_size, anchors, start_frame=None, scale=1):
 
     for img, data in csv2frames(filepath, start_frame, scale):
-        for x, y in frames2data(img, data, grid_size, anchors):
+        for x, y, _ in frames2data(img, data, grid_size, anchors):
             yield x, y
 
-if __name__ == '__main__':
-
+def debug_heavy_read():
     if len(sys.argv) < 2:
         print("ERROR: no input file")
         exit(1)
@@ -259,6 +258,39 @@ if __name__ == '__main__':
                 cv2.destroyWindow("data_video_show")
                 exit(0)
 
+def example():
+    if len(sys.argv) < 2:
+        print("ERROR: no input file")
+        exit(1)
 
+    cv2.namedWindow("example_window")
+
+    path = sys.argv[1]
+
+    # height and width of each anchor compared to grid cell
+    anchors = np.matrix([  [1, 0.5],
+                           [0.5, 1],
+                           [0.7, 0.7],
+                           [1.2, 0.4],
+                           [0.1, 0.1]
+                         ], dtype=np.float64)
+
+    # define grid
+    grid = (13, 13)
+
+    # loop through data
+    for x, y in csv2data(path, grid, anchors, start_frame=None, scale=0.25):
+
+        cv2.imshow('example_window', x)
+
+        key = cv2.waitKey(10)
+        if key > -1:
+            cv2.destroyWindow("example_window")
+            exit(0)
+
+
+# main function
+if __name__ == '__main__':
+    example()
 
 
