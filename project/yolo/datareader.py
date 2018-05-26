@@ -127,9 +127,8 @@ def frames2data(img, data, grid_size, anchors):
 
                 for k in range(n_anchors):
                     anch = anchors[k]
-                    d = np.abs(bbox[0, 3:5] - anch)
 
-                    intersec = d[0,0]*d[0,1]
+                    intersec = np.min(bbox[1,3], anch[0,0]) * np.min(bbox[0,4], anch[0,1])
                     tot_area = bbox[0,3]*bbox[0,4] + anch[0,0]*anch[0,1] - intersec
 
                     tmp_iou = intersec/tot_area
