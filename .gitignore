@@ -1,0 +1,14 @@
+*.aux
+*.log
+
+*.swp
+*.swa
+
+*/**/*.swp
+*/**/*.swa
+
+*/build/*
+!*/build/.gitkeep
+
+
+dataset
