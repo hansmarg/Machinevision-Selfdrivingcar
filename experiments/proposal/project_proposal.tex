@@ -1,0 +1,65 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+
+\title{Project proposal}
+\author{Forat Al-Hellali, Hans-Marthin Granlund }
+\date{April 2018}
+
+%\usepackage{natbib}
+%\usepackage{graphicx}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+The project will be the data-collecting part of an autonomous driving car. The program will analyze a dashcam video and will contain the following:
+\begin{itemize}
+    \item Street detection
+        \begin{itemize}
+            \item road segmentation
+            \item lane slope detection
+        \end{itemize}
+    \item Object detection
+        \begin{itemize}
+            \item other cars
+            \item signs
+            \item pedestrians
+        \end{itemize}
+    \item Calculate distance
+    \item Calculate relative speed
+    \item 3D mapping of the world
+\end{itemize}
+
+\section{Plan}
+\subsection{Street Detection}
+\subsubsection{Segmentation}
+First we would down sample and filter the image, by using the appropriate the appropriate filters like: Laplace, Gaussian, or Difference of Gaussian.
+
+Then we would experiment with different segmentation algorithms to highlight the road.
+
+\subsubsection{Lane detection}
+Use the Sobel filter to highlight lines in the picture and then run RANSAC to find the lane lines.
+
+\subsection{Object Detection}
+Train a neural network to recognize cars using the training data available from open source machine learning training databases.
+If this works out, then we would train the network to recognize pedestrians and street signs.
+
+\subsection{Calculate Distance}
+We can use the width of the lane lines (closest to the car) as a constant to calculate distance since they are mostly parallel.
+
+
+\subsection{Calculate Relative Speed}
+$$relative\_velocity = \frac{new\_estimated\_object\_distance - old\_estimated\_object\_distance}{time}$$
+Given time we will experiment with using histogram of gradients to calculate the velocity.
+
+\subsection{3D reconstruction}
+Use most of the information we gain to reconstruct a very simple 3d figure of the environment. Like the one shown in the picture.
+
+\section{Questions}
+\begin{itemize}
+\item Do you have a database for better a trainingset than ours?
+\item Any suggestions of how we would use the histogram of gradients to calculate the relative speed?
+\end{itemize}
+
+\end{document}
