@@ -182,12 +182,12 @@ def debug_heavy_read():
 
     path = sys.argv[1]
 
-    anchors = np.matrix([[1, 0.5],
-                         [0.5, 1],
-                         [0.7, 0.7],
-                         [1.2, 0.4],
-                         [0.1, 0.1]
-                         ], dtype=np.float64)
+    anchors = np.matrix([[0.2955072 , 0.3499784],
+                         [0.968816  , 1.062816 ],
+                         [1.723884  , 2.817972 ],
+                         [4.0984    , 1.837712 ],
+                         [5.07472   , 4.74964  ]], dtype=np.float64)
+
     grid = (13, 13)
     key = -1
     pause = False
@@ -268,12 +268,13 @@ def example():
     path = sys.argv[1]
 
     # height and width of each anchor compared to grid cell
-    anchors = np.matrix([  [1, 0.5],
-                           [0.5, 1],
-                           [0.7, 0.7],
-                           [1.2, 0.4],
-                           [0.1, 0.1]
-                         ], dtype=np.float64)
+    anchors = np.matrix([[0.23640576  , 0.27998272],
+                         [0.7750528   , 0.8502528 ],
+                         [1.3791072   , 2.2543776 ],
+                         [3.27872     , 1.4701696 ],
+                         [4.059776    , 3.799712  ]] , dtype=np.float64)
+
+    print(anchors)
 
     # define grid
     grid = (13, 13)
@@ -282,6 +283,7 @@ def example():
     for x, y in csv2data(path, grid, anchors, start_frame=None, scale=0.25):
 
         cv2.imshow('example_window', x)
+        print(y.tolist())
 
         key = cv2.waitKey(10)
         if key > -1:
@@ -292,5 +294,6 @@ def example():
 # main function
 if __name__ == '__main__':
     example()
+    #debug_heavy_read()
 
 
