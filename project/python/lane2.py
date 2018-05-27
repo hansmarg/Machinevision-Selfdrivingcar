@@ -87,18 +87,21 @@ def main():
         red_histo = lanefinder.i_histo(mframe[:,:,2], limit=255, mask=mask)
         red_histo = np.array(red_histo)/np.max(red_histo)*100
 
-        # prep for histogram plot
-        plot = np.zeros((120, 600, 3), dtype=np.float)
-        shapes.plot(plot, red_histo, y_max=a+5, color=(0, 0, 255), thickness=2)
-
         # calculate threshold and threshold x position on plot
-        th, h = lanefinder.dynamic_threshold(red_histo, 10, 245)
-        th_x = int(th/256 * 600)
+        dth = 10
+        th, h = lanefinder.dynamic_threshold(red_histo, dth, 245)
+        h += dth
+
+        # prep for histogram plot
+        plot = np.zeros((240, 600, 3), dtype=np.float)
+        shapes.plot(plot, red_histo, y_max=300, color=(0, 0, 255), thickness=2)
+        shapes.plot(plot, h, y_max=dth*2+2, color=(255, 0, 255), thickness=2)
 
         static_th_x = int(lanefinder.plot_threshold())
-        static_th   = int(static_th_x/600 * 256)
+        static_th   = int(static_th_x/plot.shape[1] * 256)
 
         # add plot histogram
+        th_x = int(th/256 * plot.shape[1])
         cv2.line(plot, (th_x,0), (th_x,plot.shape[1]), (255,0,0), 4)
         cv2.line(plot, (static_th_x,0), (static_th_x,plot.shape[1]), (0,255,0), 4)
         cv2.imshow("plot_window", plot)
