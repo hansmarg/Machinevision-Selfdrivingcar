@@ -40,11 +40,11 @@ def main():
 
     # create source points for polygon and transform
 
-    a = 140
-    b = 800
+    a = 140*SCALE
+    b = 800*SCALE
     t_center = np.round(frame_w/2)
-    t_height = 205
-    t_y = frame_h - t_height - 60
+    t_height = 205*SCALE
+    t_y = (frame_h - t_height - 60*SCALE)
 
     pts_src = shapes.trapazoid( a, b, t_center, t_height, t_y)
 
@@ -56,12 +56,16 @@ def main():
     mask = np.matrix(np.zeros((int(frame_h), int(frame_w))), dtype=np.uint8)
     shapes.fill_polygon(mask, pts_src, (1, 1, 1))
 
-    color_basis = 256
+    # calculate factor for making simpler color pallatte
+    color_basis = 256 # change this in case you want less than 256 colors
     color_basis = np.uint8(256/color_basis)
 
+    # variables for loop run
     key = -1
     pause = False
     start_time = time.time()*1000
+
+    # loop through video
     while True:
 
         # read a new frame from video
@@ -78,10 +82,10 @@ def main():
         # copy frame to mod it
         mframe = np.copy(frame)
 
-
-        # simplify colors
+        # simplify color basis
         mframe = np.round(mframe/color_basis).astype(np.uint8)
         mframe = mframe*color_basis
+        mframe = cv2.bitwise_and(frame, frame, mask=mask)
 
         # find the intencity histogram of the red layer
         red_histo = lanefinder.i_histo(mframe[:,:,2], limit=255, mask=mask)
@@ -105,10 +109,9 @@ def main():
         cv2.line(plot, (th_x,0), (th_x,plot.shape[1]), (255,0,0), 4)
         cv2.line(plot, (static_th_x,0), (static_th_x,plot.shape[1]), (0,255,0), 4)
         cv2.imshow("plot_window", plot)
-
         try:
-            mframe1 = lanefinder.threshold(mframe, np.array([0,0,th]), np.array([255,255,255]))
-            mframe2 = lanefinder.threshold(mframe, np.array([0,0,static_th]), np.array([255,255,255]))
+            mframe1 = lanefinder.threshold(mframe, np.array([0,0,th]), np.array([255,255,255]), mask=mask)
+            #mframe2 = lanefinder.threshold(mframe, np.array([0,0,static_th]), np.array([255,255,255]),mask=mask)
         except:
             print("Frame crash, internal opencv problem..")
             continue

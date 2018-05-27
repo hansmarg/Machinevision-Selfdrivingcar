@@ -22,8 +22,17 @@ def h_histo(img, w=1):
     return np.array(histo)
 
 # threshold an image based on rgb colors intencity
-def threshold(img, lower, upper):
-    ret = cv2.inRange(img, lower, upper)
+def threshold(img, lower, upper, mask=None):
+
+    ret = img
+    if mask is not None:
+        ret = np.copy(img)
+        ret[mask == 0] = 0
+
+    cv2.imshow("fack", ret)
+
+    ret = cv2.inRange(ret, lower, upper)
+    cv2.imshow("fack2", ret)
     return ret
 
 # calculate the threshold to show lane lines based on the histogram
