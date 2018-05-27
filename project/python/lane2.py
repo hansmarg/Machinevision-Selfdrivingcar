@@ -86,31 +86,19 @@ def main():
         # find the intencity histogram of the red layer
         red_histo = lanefinder.i_histo(mframe[:,:,2], limit=255, mask=mask)
         red_histo = np.array(red_histo)/np.max(red_histo)*100
-        a = 30
-        red_histo[red_histo >= a] = a+1
-        red_histo[red_histo < a] = 0
 
+        # prep for histogram plot
+        plot = np.zeros((120, 600, 3), dtype=np.float)
+        shapes.plot(plot, red_histo, y_max=a+5, color=(0, 0, 255), thickness=2)
 
-        b = 100
-        for i in range(len(red_histo)-1, 0, -1):
-            if b >= red_histo[i]:
-                b = red_histo[i]
-            else:
-                b = i
-                break
+        # calculate threshold and threshold x position on plot
+        th, h = lanefinder.dynamic_threshold(red_histo, 10, 245)
+        th_x = int(th/256 * 600)
 
         static_th_x = int(lanefinder.plot_threshold())
         static_th   = int(static_th_x/600 * 256)
-        #static_th   = 180
-        #static_th_x = int(static_th/256 * 600)
 
-        # plot histogram
-        #th_x = int(lanefinder.plot_threshold())
-        th_x = int(b/256 * 600)
-        #th = int(th_x/300 * 256)
-        th = b
-        plot = np.zeros((120, 600, 3), dtype=np.float)
-        shapes.plot(plot, red_histo, y_max=a+5, color=(0, 0, 255), thickness=2)
+        # add plot histogram
         cv2.line(plot, (th_x,0), (th_x,plot.shape[1]), (255,0,0), 4)
         cv2.line(plot, (static_th_x,0), (static_th_x,plot.shape[1]), (0,255,0), 4)
         cv2.imshow("plot_window", plot)
@@ -148,7 +136,7 @@ def main():
 
         if key == 32:
             pause = not pause
-        elif key == 13:
+        elif key == 27:
             # destroy the created window
             cv2.destroyAllWindows()
             exit(0)

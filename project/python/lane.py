@@ -108,16 +108,16 @@ def main():
         #cell_histo = None
         #for cell in np.vsplit(im_out, 6):
 
-        cell = np.vsplit(im_out, 6)[-1]
-        cell_histo = lanefinder.h_histo(cell)
+        cell = np.vsplit(im_out, cell_nums)[-1]
+        cell_histo = lanefinder.h_histo(cell, 1)
 
         cell_histo[cell_histo > 4] = 10
         cell_histo[cell_histo <= 4] = 0
-        cell_histo = cell_histo[::2]+cell_histo[1::2]
-        cell_histo = cell_histo[::2]+cell_histo[1::2]
+        #cell_histo = cell_histo[::2]+cell_histo[1::2]
+        #cell_histo = cell_histo[::2]+cell_histo[1::2]
         print(cell_histo)
 
-        plot = np.zeros((150, 300, 3), dtype=np.float)+255
+        plot = np.zeros((150, 600, 3), dtype=np.float)+255
         shapes.plot(plot, cell_histo, color=(0, 0, 0), thickness=2)
         cv2.imshow("plot_window", plot)
 

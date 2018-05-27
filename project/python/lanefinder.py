@@ -15,10 +15,10 @@ def i_histo(img, limit=256, mask=None):
     return np.array(histo)
 
 # horizontal histogram
-def h_histo(img):
+def h_histo(img, w=1):
     histo = []
-    for q in range(int(img.shape[1]/1)):
-        histo.append(np.sum(img[:,q:q+1] > 0))
+    for q in range(int(img.shape[1]/w)):
+        histo.append(np.sum(img[:,q*w:(q+1)*w] > 0))
     return np.array(histo)
 
 # threshold an image based on rgb colors intencity
@@ -27,9 +27,23 @@ def threshold(img, lower, upper):
     return ret
 
 # calculate the threshold to show lane lines based on the histogram
-def find_lane_threshold(histo, lower, upper):
-    ret = cv2.inRange(img, lower, upper)
-    return ret
+def dynamic_threshold(histo, a, max_i=None):
+    h = np.copy(histo)
+
+    h[h >= a] = a+1
+    h[h < a] = 0
+
+    if max_i is None:
+        max_i = len(h)-1
+
+    b = 100
+    for i in range(max_i, 0, -1):
+        if b >= h[i]:
+            b = h[i]
+        else:
+            return i, h
+
+    return max_i, h
 
 # event_handler for making threshold graphs clickable
 _plot_threshold = 0
