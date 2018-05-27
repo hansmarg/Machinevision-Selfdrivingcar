@@ -12,7 +12,7 @@ def i_histo(img, mask=None):
     for i in range(256):
         histo.append(np.sum(img[img == i]))
 
-    return histo
+    return np.array(histo)
 
 # horizontal histogram
 def h_histo(img):
@@ -23,6 +23,11 @@ def h_histo(img):
 
 # threshold an image based on rgb colors intencity
 def threshold(img, lower, upper):
+    mask = cv2.inRange(img, lower, upper)
+    return mask
+
+# calculate the threshold to show lane lines based on the histogram
+def find_lane_threshold(histo, lower, upper):
     mask = cv2.inRange(img, lower, upper)
     return mask
 

@@ -35,7 +35,6 @@ def main():
 
     # create windows
     cv2.namedWindow("video_window")
-    cv2.namedWindow("warp_window")
     cv2.namedWindow("plot_window")
     cv2.setMouseCallback("plot_window", lanefinder.threshold_plot_event_handler)
 
@@ -85,7 +84,10 @@ def main():
 
         # find the intencity histogram of the red layer
         red_histo = lanefinder.i_histo(mframe[:,:,2], mask=mask)
-
+        red_histo = np.array(red_histo)/np.max(red_histo)*100
+        a = 10
+        red_histo[red_histo > a] = a
+        red_histo[red_histo < a] = 0
 
 
         # plot histogram
