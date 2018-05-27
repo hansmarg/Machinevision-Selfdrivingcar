@@ -67,41 +67,64 @@ def main():
         # read a new frame from video
         ret, frame = cap.read()
 
+        # breaking the while loop at the end of the video
+        if ret == False:
+            print("Found the end of the video")
+            break
+
         # get frame
         frame = cv2.resize(frame, None, fx=SCALE, fy=SCALE, interpolation = cv2.INTER_CUBIC) # resize
 
         # copy frame to mod it
         mframe = np.copy(frame)
 
-        # breaking the while loop at the end of the video
-        if ret == False:
-            print("Found the end of the video")
-            break
 
         # simplify colors
         mframe = np.round(mframe/color_basis).astype(np.uint8)
         mframe = mframe*color_basis
 
         # find the intencity histogram of the red layer
-        red_histo = lanefinder.i_histo(mframe[:,:,2], mask=mask)
+        red_histo = lanefinder.i_histo(mframe[:,:,2], limit=255, mask=mask)
         red_histo = np.array(red_histo)/np.max(red_histo)*100
-        a = 10
-        red_histo[red_histo > a] = a
+        a = 30
+        red_histo[red_histo >= a] = a+1
         red_histo[red_histo < a] = 0
 
 
+        b = 100
+        for i in range(len(red_histo)-1, 0, -1):
+            if b >= red_histo[i]:
+                b = red_histo[i]
+            else:
+                b = i
+                break
+
+        static_th_x = int(lanefinder.plot_threshold())
+        static_th   = int(static_th_x/600 * 256)
+        #static_th   = 180
+        #static_th_x = int(static_th/256 * 600)
+
         # plot histogram
-        th_x = int(lanefinder.plot_threshold())
-        th = int(th_x/300 * 256)
-        plot = np.zeros((150, 300, 3), dtype=np.float)
-        shapes.plot(plot, red_histo, color=(0, 0, 255), thickness=2)
-        cv2.line(plot, (th_x,0), (th_x,plot.shape[1]), (255,255,255), 2)
+        #th_x = int(lanefinder.plot_threshold())
+        th_x = int(b/256 * 600)
+        #th = int(th_x/300 * 256)
+        th = b
+        plot = np.zeros((120, 600, 3), dtype=np.float)
+        shapes.plot(plot, red_histo, y_max=a+5, color=(0, 0, 255), thickness=2)
+        cv2.line(plot, (th_x,0), (th_x,plot.shape[1]), (255,0,0), 4)
+        cv2.line(plot, (static_th_x,0), (static_th_x,plot.shape[1]), (0,255,0), 4)
         cv2.imshow("plot_window", plot)
 
-        mframe = lanefinder.threshold(mframe, np.array([0,0,th]), np.array([255,255,255]))
+        try:
+            mframe1 = lanefinder.threshold(mframe, np.array([0,0,th]), np.array([255,255,255]))
+            mframe2 = lanefinder.threshold(mframe, np.array([0,0,static_th]), np.array([255,255,255]))
+        except:
+            print("Frame crash, internal opencv problem..")
+            continue
 
         # show the frame in the created window
-        cv2.imshow("video_window", mframe);
+        cv2.imshow("video_window", mframe1);
+        cv2.imshow("shit", mframe2);
 
         # calculate time it takes to do homo transform
         calc_time = (time.time()*1000) - start_time
@@ -126,8 +149,6 @@ def main():
         if key == 32:
             pause = not pause
         elif key == 13:
-            pass
-        elif key > -1:
             # destroy the created window
             cv2.destroyAllWindows()
             exit(0)

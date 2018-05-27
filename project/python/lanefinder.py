@@ -3,13 +3,13 @@ import numpy as np
 import cv2
 
 # intencity histogram
-def i_histo(img, mask=None):
+def i_histo(img, limit=256, mask=None):
     histo = []
 
     if mask is not None:
         img = img[mask > 0]
 
-    for i in range(256):
+    for i in range(limit):
         histo.append(np.sum(img[img == i]))
 
     return np.array(histo)
@@ -23,13 +23,13 @@ def h_histo(img):
 
 # threshold an image based on rgb colors intencity
 def threshold(img, lower, upper):
-    mask = cv2.inRange(img, lower, upper)
-    return mask
+    ret = cv2.inRange(img, lower, upper)
+    return ret
 
 # calculate the threshold to show lane lines based on the histogram
 def find_lane_threshold(histo, lower, upper):
-    mask = cv2.inRange(img, lower, upper)
-    return mask
+    ret = cv2.inRange(img, lower, upper)
+    return ret
 
 # event_handler for making threshold graphs clickable
 _plot_threshold = 0
