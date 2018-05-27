@@ -6,6 +6,8 @@ import time
 import shapes
 import lanefinder
 
+SCALE=0.5
+
 def main():
     video_path = "../../../dataset/project_video.mp4"
 
@@ -28,12 +30,14 @@ def main():
     wait_time = 1000/fps;
 
     # get height and width
-    frame_h = cap.get(cv2.CAP_PROP_FRAME_HEIGHT);
-    frame_w = cap.get(cv2.CAP_PROP_FRAME_WIDTH);
+    frame_h = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)*SCALE;
+    frame_w = cap.get(cv2.CAP_PROP_FRAME_WIDTH)*SCALE;
 
     # create windows
-    cv2.namedWindow("video_window", cv2.WINDOW_NORMAL)
+    cv2.namedWindow("video_window")
     cv2.namedWindow("warp_window")
+    cv2.namedWindow("plot_window")
+    cv2.setMouseCallback("plot_window", lanefinder.threshold_plot_event_handler)
 
     # create source points for polygon and transform
 
@@ -63,6 +67,11 @@ def main():
 
         # read a new frame from video
         ret, frame = cap.read()
+
+        # get frame
+        frame = cv2.resize(frame, None, fx=SCALE, fy=SCALE, interpolation = cv2.INTER_CUBIC) # resize
+
+        # copy frame to mod it
         mframe = np.copy(frame)
 
         # breaking the while loop at the end of the video
@@ -77,13 +86,17 @@ def main():
         # find the intencity histogram of the red layer
         red_histo = lanefinder.i_histo(mframe[:,:,2], mask=mask)
 
-        #mframe = lanefinder.threshold(mframe, np.array([0,0,180]), np.array([255,255,255]))
 
 
         # plot histogram
+        th_x = int(lanefinder.plot_threshold())
+        th = int(th_x/300 * 256)
         plot = np.zeros((150, 300, 3), dtype=np.float)
         shapes.plot(plot, red_histo, color=(0, 0, 255), thickness=2)
+        cv2.line(plot, (th_x,0), (th_x,plot.shape[1]), (255,255,255), 2)
         cv2.imshow("plot_window", plot)
+
+        mframe = lanefinder.threshold(mframe, np.array([0,0,th]), np.array([255,255,255]))
 
         # show the frame in the created window
         cv2.imshow("video_window", mframe);

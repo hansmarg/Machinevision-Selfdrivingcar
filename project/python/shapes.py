@@ -28,9 +28,7 @@ def draw_polygon(img, fig, color=(255,255,255), thickness=1, t=8, shift=0):
         a = b
 
 def fill_polygon(img, fig, color=(255,255,255)):
-    print(fig)
     points = np.matrix(fig)
-    print(points)
     cv2.fillPoly(img, pts=[points], color=color)
 
 def plot(canvas, plot, y_max=None, color=(255,0,0), thickness=2):

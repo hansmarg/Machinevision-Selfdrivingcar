@@ -26,4 +26,12 @@ def threshold(img, lower, upper):
     mask = cv2.inRange(img, lower, upper)
     return mask
 
+# event_handler for making threshold graphs clickable
+_plot_threshold = 0
+def threshold_plot_event_handler(event, x, y, flags, param):
+    global _plot_threshold
+    if event == cv2.EVENT_LBUTTONDOWN:
+        _plot_threshold = x
 
+def plot_threshold(w=1):
+    return _plot_threshold/w
