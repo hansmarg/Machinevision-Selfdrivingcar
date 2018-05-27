@@ -3,16 +3,16 @@ import numpy as np
 import cv2
 
 def trapazoid(a, b, center, height, y):
-    return np.matrix([[center - a,          y],  # point1
-                      [center + a,          y],  # point2
-                      [center + b, y + height],  # point3
-                      [center - b, y + height]]) # point4
+    return np.matrix([[int(center - a), int(         y)],  # point1
+                      [int(center + a), int(         y)],  # point2
+                      [int(center + b), int(y + height)],  # point3
+                      [int(center - b), int(y + height)]]) # point4
 
 def rectangle(height, width):
-    return np.matrix([[      0 ,     0 ],  # point1
-                      [ height ,     0 ],  # point2
-                      [ height , width ],  # point3
-                      [      0 , width ]]) # point4
+    return np.matrix([[ int(     0) , int(    0) ],  # point1
+                      [ int(height) , int(    0) ],  # point2
+                      [ int(height) , int(width) ],  # point3
+                      [ int(     0) , int(width) ]]) # point4
 
 def draw_polygon(img, fig, color=(255,255,255), thickness=1, t=8, shift=0):
     points = np.matrix(fig)
@@ -26,6 +26,12 @@ def draw_polygon(img, fig, color=(255,255,255), thickness=1, t=8, shift=0):
     for b in points[1:]:
         cv2.line(img, (int(a[0,0]), int(a[0,1])), (int(b[0,0]), int(b[0,1])), color, thickness)
         a = b
+
+def fill_polygon(img, fig, color=(255,255,255)):
+    print(fig)
+    points = np.matrix(fig)
+    print(points)
+    cv2.fillPoly(img, pts=[points], color=color)
 
 def plot(canvas, plot, y_max=None, color=(255,0,0), thickness=2):
 

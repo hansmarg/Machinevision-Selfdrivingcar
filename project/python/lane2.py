@@ -49,23 +49,9 @@ def main():
     warp_img_size = (600, 600)
     pts_dst = shapes.rectangle( warp_img_size[0] , warp_img_size[1] )
 
-    # Calculate Homography
-    h, status = cv2.findHomography(pts_src, pts_dst)
-
-    """
-    # Output image
-    im_out
-    """
-
     # polygon figure
-    mask = np.matrix(np.ones((int(frame_h), int(frame_w))), dtype=np.int8)
-    shapes.draw_polygon(mask, pts_src)
-
-    """
-    # time calculation
-    clock_t time_s;
-    time_s = clock();
-    """
+    mask = np.matrix(np.zeros((int(frame_h), int(frame_w))), dtype=np.uint8)
+    shapes.fill_polygon(mask, pts_src, (1, 1, 1))
 
     color_basis = 256
     color_basis = np.uint8(256/color_basis)
@@ -77,47 +63,30 @@ def main():
 
         # read a new frame from video
         ret, frame = cap.read()
+        mframe = np.copy(frame)
 
         # breaking the while loop at the end of the video
         if ret == False:
             print("Found the end of the video")
             break
 
-        # warp source image to destination based on homography
-        im_out = cv2.warpPerspective(frame, h, warp_img_size)
+        # simplify colors
+        mframe = np.round(mframe/color_basis).astype(np.uint8)
+        mframe = mframe*color_basis
 
-        im_out = np.round(im_out/color_basis).astype(np.uint8)
-        im_out = im_out*color_basis
+        # find the intencity histogram of the red layer
+        red_histo = lanefinder.i_histo(mframe[:,:,2], mask=mask)
 
-        im_out = lanefinder.threshold(im_out, np.array([0,0,180]), np.array([255,255,255]))
+        #mframe = lanefinder.threshold(mframe, np.array([0,0,180]), np.array([255,255,255]))
 
-        # draw trapazoid on the frame
-        shapes.draw_polygon(frame, pts_src, color=(0,0,0), thickness=6)
 
-        # show the frame in the created window
-        cv2.imshow("video_window", frame);
-
-        im_out_h  = im_out.shape[0]
-        cell_nums = 6
-        cell_h    = im_out_h/cell_nums
-
-        for i in range(1, cell_nums):
-            im_out[ int(cell_h*i - 1) : int(cell_h*i + 1), :] += 255
-        cv2.imshow("warp_window", im_out)
-
-        cell_histo = None
-        #for cell in np.vsplit(im_out, 6):
-        cell = np.vsplit(im_out, 6)[-1]
-        cell_histo = lanefinder.i_histo(cell)
-
-        cell_histo[cell_histo > 4] = 10
-        cell_histo[cell_histo <= 4] = 0
-        print(cell_histo)
-
-        plot = np.zeros((150, 300, 3), dtype=np.float)+255
-        shapes.plot(plot, cell_histo, color=(0, 0, 0), thickness=2)
+        # plot histogram
+        plot = np.zeros((150, 300, 3), dtype=np.float)
+        shapes.plot(plot, red_histo, color=(0, 0, 255), thickness=2)
         cv2.imshow("plot_window", plot)
 
+        # show the frame in the created window
+        cv2.imshow("video_window", mframe);
 
         # calculate time it takes to do homo transform
         calc_time = (time.time()*1000) - start_time
