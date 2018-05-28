@@ -53,6 +53,9 @@ def main():
     # Calculate Homography
     h, status = cv2.findHomography(pts_src, pts_dst)
 
+    h2, status = cv2.findHomography(pts_dst, pts_src)
+    
+        
     """
     # Output image
     im_out
@@ -87,6 +90,8 @@ def main():
         # warp source image to destination based on homography
         im_out = cv2.warpPerspective(frame, h, warp_img_size)
 
+        cv2.imshow("Warp unthresholded", im_out)
+
         im_out = np.round(im_out/color_basis).astype(np.uint8)
         im_out = im_out*color_basis
 
@@ -103,10 +108,23 @@ def main():
 
 
         #------------------------------------------------------------------------------
+        mat = np.zeros([600,600], dtype=np.uint8)
+
         blank_img = np.zeros((im_out.shape[0],im_out.shape[1],3), np.uint8)
         blank_img[im_out > 0] = (255,255,255)
 
         line_l, line_r = lanefinder.find_lane_points(im_out, grid)
+
+        line_l = np.vstack([line_l[0], line_l, line_l[-1]])
+        line_l[-1,1] = mat.shape[0]+50
+        line_l[0,1] = -50
+
+        line_r = np.vstack([line_r[0], line_r, line_r[-1]])
+        line_r[-1,1] = mat.shape[0]+50
+        line_r[0,1] = -50
+
+        print(line_l)
+        print(line_r)
 
         for p in line_r:
             cv2.line(blank_img, (p[0]-4, p[1]), (p[0]+4, p[1]), (255,0,0), 6)
@@ -118,35 +136,50 @@ def main():
         poly_l = np.polyfit(line_l[:,0]+0.1, line_l[:,1]+0.1, deg = 2, rcond=None, full=False, w=None, cov=False)
         poly_r = np.polyfit(line_r[:,0]+0.1, line_r[:,1]+0.1, deg = 2, rcond=None, full=False, w=None, cov=False)
 
-        mat = np.zeros([600,600], dtype=np.uint8)
 
         l_array = []
         r_array = []
 
-        for x in range(np.min(line_l[:,0]), np.max(line_l[:,0])):
+        for x in range(np.min(line_l[:,0]), np.max(line_l[:,0])+5):
             y = int(poly_l[0]*x**2 + poly_l[1]*x + poly_l[2])
             #y = int(poly_l[0]*x + poly_l[1])
 
-            if 0 < y < 600 and 100 < x < 500: 
+            if 0 <= y < 600 and 100 < x < 500: 
                 mat[y, x] = 255
                 l_array.append((x,y))
         #l_array.append((np.max(line_l[:,0]),599))
 
-        for x in range(np.min(line_r[:,0]), np.max(line_r[:,0])):
+        for x in range(np.min(line_r[:,0]), np.max(line_r[:,0])+5):
             #y = int(poly_r[0]*x + poly_r[1])
             y = int(poly_r[0]*x**2 + poly_r[1]*x + poly_r[2])
 
-            if 0 < y < 600 and 100 < x < 500: 
+            if 0 <= y < 600 and 100 < x < 500: 
                 mat[y, x] = 255
                 r_array.append((x,y))
         #r_array.append((np.max(line_r[:,0]),599))
 
         #for x in range(np.min(line_r[:,0]), np.max(line_r[:,0])):
         #    print([int(poly_r[0]*np.power(x,2) + poly_r[1]*x + poly_r[2]), x])
-        shapes.draw_polygon(mat, r_array, color=(255,255,255), thickness=1, t=8, shift=0, close=False)
-        shapes.draw_polygon(mat, l_array, color=(255,255,255), thickness=1, t=8, shift=0, close=False)
+        shapes.draw_polygon(mat, r_array, color=(255,0,0), thickness=10, t=8, shift=0, close=False)
+        shapes.draw_polygon(mat, l_array, color=(255,0,0), thickness=10, t=8, shift=0, close=False)
+
+        #trap = np.matrix(pts_src, dtype=np.int16)
+        #print(trap)
+        #trap_w = np.max(trap[:,0]) - np.min(trap[:,0])
+        #trap_h = np.max(trap[:,1]) - np.min(trap[:,1])
+        #print(trap_h, trap_w)
+
+        
+
+        im_out2 = cv2.warpPerspective(mat, h2, ( int(frame_w), int(frame_h)))
 
         cv2.imshow("ASDASD", mat)
+
+        cv2.imshow("noesdfdsd", im_out)
+
+        frame[im_out2 > 0] = (0,0,255)
+        cv2.imshow("sushi", frame)
+
         #print(poly_l)
         
 

@@ -99,6 +99,7 @@ def main():
         # calculate threshold and threshold x position on plot
         dth = 5
         th, h = lanefinder.dynamic_threshold(red_histo, dth, 245)
+        th += 20
         h += dth
 
         # prep for histogram plot
@@ -107,7 +108,7 @@ def main():
         shapes.plot(plot, h, y_max=dth*2+2, color=(255, 0, 255), thickness=2)
 
         static_th_x = int(lanefinder.plot_threshold())
-        static_th   = int(static_th_x/plot.shape[1] * 256)
+        static_th   = 180 #int(static_th_x/plot.shape[1] * 256)
 
         # add plot histogram
         th_x = int(th/256 * plot.shape[1])
@@ -155,6 +156,40 @@ def main():
 
         # get start time for calculating wait_time next iteration
         start_time = time.time()*1000
+
+                                        # frame     rho  theta  threshold  line    srn    stn
+        #hough_lines = cv2.HoughLinesP(mframe2, 1, np.pi, static_th, minLineLength = 25, maxLineGap = 250)
+
+        edges = cv2.Canny(mframe2,100,200)
+        cv2.imshow("sadsad",edges) 
+        #lines = cv2.HoughLinesP(edges, 1, np.pi/180, threshold, 0, minLineLength, 20);
+
+        
+
+        #cv2.cvtColor()
+        minLineLengths = 60
+        maxLineGaps = 30
+        gray_image = cv2.cvtColor(mframe2, cv2.COLOR_GRAY2BGR)
+
+        lines = cv2.HoughLinesP(edges, 1, np.pi/180, 1, minLineLength = minLineLengths, maxLineGap = maxLineGaps)
+        #HoughLinesP(cframe, lines, 1, CV_PI/180, 25, 30, 250 );
+        print(lines)
+        try:
+            for line in lines:
+                
+                print(line)
+                try:
+                    cv2.line(frame, (line[0,0],line[0,1]), (line[0,2],line[0,3]), (255,0,0), thickness=3, lineType=8)
+                    
+                except:
+                    pass
+        except:
+                pass
+        cv2.imshow('hough',frame)
+        #cv2.imshow('hough',gray_image)
+
+        #print(lines)
+        #input()
 
 
 # run main function

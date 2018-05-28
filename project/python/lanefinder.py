@@ -96,7 +96,7 @@ def find_lane_points(img, grid):
     pic_lane_points = []
     split = np.vsplit(img, 6)
 
-    points_grid = np.zeros((grid[0], grid[1], 2), dtype=np.uint16)
+    points_grid = np.zeros((grid[0], grid[1], 2), dtype=np.int16)
 
     for i in range(len(split)):
         cell = split[i]
