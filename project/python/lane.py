@@ -99,49 +99,13 @@ def main():
 
         grid = (6,6)
 
-        im_out_h  = im_out.shape[0]
-        cell_h    = im_out_h/grid[0]
-
-        for i in range(1, grid[0]):
-            im_out[ int(cell_h*i - 1) : int(cell_h*i + 1), :] += 255
-        #cv2.imshow("warp_window", im_out)
-
-        clearence = int(im_out.shape[1]/grid[1])
-        pic_lane_points = []
-        split = np.vsplit(im_out, 6)
-
-        points_grid = np.zeros((grid[0], grid[1], 2), dtype=np.uint16)
-        for i in range(len(split)):
-            cell = split[i]
-
-            cell_histo = lanefinder.h_histo(cell, 1)
-
-            cell_histo[cell_histo > 4] = 10
-            cell_histo[cell_histo <= 4] = 0
-
-            cell_lane_points = lanefinder.h_histo_peaks(cell_histo, clearence)
-
-            pic_lane_points.append(cell_lane_points)
 
 
+        #------------------------------------------------------------------------------
         blank_img = np.zeros((im_out.shape[0],im_out.shape[1],3), np.uint8)
         blank_img[im_out > 0] = (255,255,255)
-        cell_h = cell.shape[0]
-        cell_h2 = int(cell_h/2)
-        for i in range(len(pic_lane_points)):
-            pts = pic_lane_points[i]
-            if pts is not None:
-                for pt in pts:
-                    p_x = pt
-                    p_y = i*cell_h + cell_h2
-                    p_cords = np.array([p_x, p_y], dtype=np.uint16)
-                    cv2.line(blank_img, (p_x, p_y-4), (p_x, p_y+4), (0,0,255), 6)
 
-                    print(int(p_x/clearence), int(p_y/cell_h))
-                    points_grid[int(p_y/cell_h),int(p_x/clearence)] = p_cords
-
-        line_r = np.max(points_grid[:,1:3,:], axis=1)
-        line_l = np.max(points_grid[:,3:5,:], axis=1)
+        line_l, line_r = lanefinder.find_lane_points(im_out, grid)
 
         for p in line_r:
             cv2.line(blank_img, (p[0]-4, p[1]), (p[0]+4, p[1]), (255,0,0), 6)
@@ -149,12 +113,7 @@ def main():
             cv2.line(blank_img, (p[0]-4, p[1]), (p[0]+4, p[1]), (0,255,0), 6)
 
         cv2.imshow("gogibogi", blank_img)
-
-
-
-       # plot = np.zeros((150, 800, 3), dtype=np.float)+255
-       # shapes.plot(plot, cell_histo, color=(0, 0, 0), thickness=2)
-       # cv2.imshow("plot_window", plot)
+        #-------------------------------------------------------------------------------
 
 
         # calculate time it takes to do homo transform

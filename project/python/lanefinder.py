@@ -22,7 +22,7 @@ def h_histo(img, w=1):
     return np.array(histo)
 
 # find centers of horizontal histograms
-def h_histo_peaks(histo, clearencet):
+def h_histo_peaks(histo, clearence):
     pts = []
     for i in range(len(histo)-1):
         if histo[i] - histo[i+1] > 0:
@@ -84,3 +84,45 @@ def threshold_plot_event_handler(event, x, y, flags, param):
 
 def plot_threshold(w=1):
     return _plot_threshold/w
+
+def find_lane_points(img, grid):
+    img_h  = img.shape[0]
+    cell_h = img_h/grid[0]
+
+    for i in range(1, grid[0]):
+        img[ int(cell_h*i - 1) : int(cell_h*i + 1), :] += 255
+
+    clearence = int(img.shape[1]/grid[1])
+    pic_lane_points = []
+    split = np.vsplit(img, 6)
+
+    points_grid = np.zeros((grid[0], grid[1], 2), dtype=np.uint16)
+
+    for i in range(len(split)):
+        cell = split[i]
+
+        cell_histo = h_histo(cell, 1)
+
+        cell_histo[cell_histo > 4] = 10
+        cell_histo[cell_histo <= 4] = 0
+
+        cell_lane_points = h_histo_peaks(cell_histo, clearence)
+
+        pic_lane_points.append(cell_lane_points)
+
+    cell_h = int(cell_h)
+    cell_h2 = int(cell_h/2)
+    for i in range(len(pic_lane_points)):
+        pts = pic_lane_points[i]
+        if pts is not None:
+            for pt in pts:
+                p_x = pt
+                p_y = i*cell_h + cell_h2
+                p_cords = np.array([p_x, p_y], dtype=np.uint16)
+
+                points_grid[int(p_y/cell_h),int(p_x/clearence)] = p_cords
+
+    line_l = np.max(points_grid[:,1:3,:], axis=1)
+    line_r = np.max(points_grid[:,3:5,:], axis=1)
+
+    return line_l, line_r
