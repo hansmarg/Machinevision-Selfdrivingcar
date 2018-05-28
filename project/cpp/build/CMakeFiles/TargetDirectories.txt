@@ -1,0 +1,4 @@
+/home/forat/Desktop/unik4690/Machinevision-Selfdrivingcar/project/cpp/build/CMakeFiles/edit_cache.dir
+/home/forat/Desktop/unik4690/Machinevision-Selfdrivingcar/project/cpp/build/CMakeFiles/rebuild_cache.dir
+/home/forat/Desktop/unik4690/Machinevision-Selfdrivingcar/project/cpp/build/CMakeFiles/histogram.dir
+/home/forat/Desktop/unik4690/Machinevision-Selfdrivingcar/project/cpp/build/CMakeFiles/lane.dir
