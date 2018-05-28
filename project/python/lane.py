@@ -2,6 +2,7 @@ import os
 import numpy as np
 import cv2
 import time
+import math
 
 import shapes
 import lanefinder
@@ -113,6 +114,42 @@ def main():
             cv2.line(blank_img, (p[0]-4, p[1]), (p[0]+4, p[1]), (0,255,0), 6)
 
         cv2.imshow("gogibogi", blank_img)
+
+        poly_l = np.polyfit(line_l[:,0]+0.1, line_l[:,1]+0.1, deg = 2, rcond=None, full=False, w=None, cov=False)
+        poly_r = np.polyfit(line_r[:,0]+0.1, line_r[:,1]+0.1, deg = 2, rcond=None, full=False, w=None, cov=False)
+
+        mat = np.zeros([600,600], dtype=np.uint8)
+
+        l_array = []
+        r_array = []
+
+        for x in range(np.min(line_l[:,0]), np.max(line_l[:,0])):
+            y = int(poly_l[0]*x**2 + poly_l[1]*x + poly_l[2])
+            #y = int(poly_l[0]*x + poly_l[1])
+
+            if 0 < y < 600 and 100 < x < 500: 
+                mat[y, x] = 255
+                l_array.append((x,y))
+        #l_array.append((np.max(line_l[:,0]),599))
+
+        for x in range(np.min(line_r[:,0]), np.max(line_r[:,0])):
+            #y = int(poly_r[0]*x + poly_r[1])
+            y = int(poly_r[0]*x**2 + poly_r[1]*x + poly_r[2])
+
+            if 0 < y < 600 and 100 < x < 500: 
+                mat[y, x] = 255
+                r_array.append((x,y))
+        #r_array.append((np.max(line_r[:,0]),599))
+
+        #for x in range(np.min(line_r[:,0]), np.max(line_r[:,0])):
+        #    print([int(poly_r[0]*np.power(x,2) + poly_r[1]*x + poly_r[2]), x])
+        shapes.draw_polygon(mat, r_array, color=(255,255,255), thickness=1, t=8, shift=0, close=False)
+        shapes.draw_polygon(mat, l_array, color=(255,255,255), thickness=1, t=8, shift=0, close=False)
+
+        cv2.imshow("ASDASD", mat)
+        #print(poly_l)
+        
+
         #-------------------------------------------------------------------------------
 
 

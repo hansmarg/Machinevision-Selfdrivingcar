@@ -14,13 +14,14 @@ def rectangle(height, width):
                       [ int(height) , int(width) ],  # point3
                       [ int(     0) , int(width) ]]) # point4
 
-def draw_polygon(img, fig, color=(255,255,255), thickness=1, t=8, shift=0):
+def draw_polygon(img, fig, color=(255,255,255), thickness=1, t=8, shift=0, close=True):
     points = np.matrix(fig)
 
     if len(points) <= 1:
         return
 
-    points = np.vstack([points, points[0]])
+    if close==True:
+        points = np.vstack([points, points[0]])
 
     a = points[0]
     for b in points[1:]:
