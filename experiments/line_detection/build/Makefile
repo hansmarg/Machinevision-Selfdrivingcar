@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/forat/Desktop/unik4690/Machinevision---Self-driving-car/line_detection
+CMAKE_SOURCE_DIR = /home/hm/unik4960/Machinevision-Selfdrivingcar/experiments/line_detection
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/forat/Desktop/unik4690/Machinevision---Self-driving-car/line_detection/build
+CMAKE_BINARY_DIR = /home/hm/unik4960/Machinevision-Selfdrivingcar/experiments/line_detection/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,9 +80,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/forat/Desktop/unik4690/Machinevision---Self-driving-car/line_detection/build/CMakeFiles /home/forat/Desktop/unik4690/Machinevision---Self-driving-car/line_detection/build/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/hm/unik4960/Machinevision-Selfdrivingcar/experiments/line_detection/build/CMakeFiles /home/hm/unik4960/Machinevision-Selfdrivingcar/experiments/line_detection/build/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/forat/Desktop/unik4690/Machinevision---Self-driving-car/line_detection/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/hm/unik4960/Machinevision-Selfdrivingcar/experiments/line_detection/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target

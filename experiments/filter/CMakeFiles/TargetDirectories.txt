@@ -1,3 +1,0 @@
-/home/hm/Machinevision---Self-driving-car/filter/CMakeFiles/edit_cache.dir
-/home/hm/Machinevision---Self-driving-car/filter/CMakeFiles/rebuild_cache.dir
-/home/hm/Machinevision---Self-driving-car/filter/CMakeFiles/filters_test.dir

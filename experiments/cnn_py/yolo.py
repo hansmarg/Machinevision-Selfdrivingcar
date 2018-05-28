@@ -1,6 +1,8 @@
 import tensorflow as tf
 import numpy as np
 import cv2 as cv
+import datareader
+
 
 N_ANCHORS = 5
 N_CLASSES = 4
@@ -193,7 +195,7 @@ def neural_network(image, trainit = True):
 	conv8 = tf.layers.batch_normalization(conv8, training=trainit, momentum=0.99, epsilon=0.001, center=True, scale=True)
 
 							#13, 13, N_ANCHORS * (5 + N_CLASSES)
-	# conv 	1x1		1		(13, 13, 125)
+	# conv 	1x1		1		(13, 13, 45)
 	conv9 = tf.layers.conv2d(
 								inputs=conv8,
 								filters=N_ANCHORS * (5 + N_CLASSES),
@@ -286,13 +288,57 @@ def simple_yolo_loss(pred, label, lambda_coord, lambda_no_obj):
 
 
 def make_batches(batch_size = 24):
-	a, b = 1, 2
-	return a, b
+	images = []
+	labels = []
+	path = "../../../dataset/final_set/object-dataset/labels.csv"
+
+	# height and width of each anchor compared to grid cell
+	anchors = np.matrix([[0.23640576  , 0.27998272],
+                         [0.7750528   , 0.8502528 ],
+                         [1.3791072   , 2.2543776 ],
+                         [3.27872     , 1.4701696 ],
+                         [4.059776    , 3.799712  ]], dtype=np.float64)
+
+    # define grid
+	grid = (13, 13)
+
+    # loop through data
+	for img, lbl in datareader.csv2data(path, grid, anchors, start_frame=None, scale=0.25):
+		images.append(img)
+		labels.append(lbl)
+	
+	return images, labels
 
 def train():
 
 	with tf.name_scope('batch'):
 		batch_image, batch_label = make_batches()
+
+	batch_image = tf.train.batch(
+									batch_image, 
+									batch_size = BATCH_SIZE,
+								    num_threads=1,
+								    capacity=32,
+								    enqueue_many=False,
+								    shapes=None,
+								    dynamic_pad=False,
+								    allow_smaller_final_batch=False,
+								    shared_name=None,
+								    name=None
+								)
+
+	batch_label = tf.train.batch(
+									batch_label, 
+									batch_size = BATCH_SIZE,
+								    num_threads=1,
+								    capacity=32,
+								    enqueue_many=False,
+								    shapes=None,
+								    dynamic_pad=False,
+								    allow_smaller_final_batch=False,
+								    shared_name=None,
+								    name=None
+								)
 
 	image = tf.placeholder(shape = [None, IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_DEPTH], dtype=tf.float32, name='image_placeholder')
 	label = tf.placeholder(shape = [None, GRID_H, GRID_W, N_ANCHORS * (5 + N_CLASSES)], dtype=tf.float32, name='label_palceholder')
@@ -306,17 +352,20 @@ def train():
 		loss = simple_yolo_loss(y, label, LAMBDA_COORD, LAMBDA_NO_OBJ)
 
 	opt = tf.train.AdamOptimizer(learning_rate=LEARNING_RATE)
+	print("AdamOptimizer")
 
 	update_ops = tf.get_collection(tf.GraphKeys.UPDATE_OPS)
 	with tf.control_dependencies(update_ops):
 		train_step = opt.minimize(loss)
-		
+	
+	print("First sess")
 	sess = tf.Session()
 	sess.run(tf.global_variables_initializer())
 	coord = tf.train.Coordinator()
 	saver = tf.train.Saver()
 	threads = tf.train.start_queue_runners(sess=sess, coord=coord)
 
+	print("starts iters")
 	for i in range(NUM_ITERS):
 		
 		image_data, label_data = sess.run([batch_image, batch_label])
@@ -332,6 +381,9 @@ def train():
 	saver.save(sess, os.path.join(SAVE_FILE,'yolo'), global_step=i+1)
 
 if __name__ == "__main__":
+
+
+
 	train()
 
 

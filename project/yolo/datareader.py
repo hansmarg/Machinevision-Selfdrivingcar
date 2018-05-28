@@ -235,8 +235,6 @@ def debug_heavy_read():
                 cv2.rectangle(blank, (int(xpos) - 1, int(ypos) - 1), (int(xpos) + 1, int(ypos) + 1), color, 1)
                 cv2.rectangle(blank, (int(xpos) - w_2, int(ypos) - h_2), (int(xpos) + w_2, int(ypos) + h_2), color, 1)
 
-
-
             cv2.imshow('data_video_show', blank)
 
             fack += 1
@@ -293,7 +291,7 @@ def example():
 
 # main function
 if __name__ == '__main__':
-    example()
-    #debug_heavy_read()
+    #example()
+    debug_heavy_read()
 
 

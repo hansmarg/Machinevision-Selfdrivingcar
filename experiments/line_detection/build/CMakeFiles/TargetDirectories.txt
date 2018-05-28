@@ -1,3 +1,3 @@
-/home/forat/Desktop/unik4690/Machinevision---Self-driving-car/line_detection/build/CMakeFiles/edit_cache.dir
-/home/forat/Desktop/unik4690/Machinevision---Self-driving-car/line_detection/build/CMakeFiles/rebuild_cache.dir
-/home/forat/Desktop/unik4690/Machinevision---Self-driving-car/line_detection/build/CMakeFiles/hough_test.dir
+/home/hm/unik4960/Machinevision-Selfdrivingcar/experiments/line_detection/build/CMakeFiles/edit_cache.dir
+/home/hm/unik4960/Machinevision-Selfdrivingcar/experiments/line_detection/build/CMakeFiles/rebuild_cache.dir
+/home/hm/unik4960/Machinevision-Selfdrivingcar/experiments/line_detection/build/CMakeFiles/hough_test.dir
