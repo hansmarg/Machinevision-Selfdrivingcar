@@ -291,7 +291,7 @@ def example():
 
 # main function
 if __name__ == '__main__':
-    example()
-    #debug_heavy_read()
+    #example()
+    debug_heavy_read()
 
 

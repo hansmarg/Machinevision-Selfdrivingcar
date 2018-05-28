@@ -80,8 +80,11 @@ int main(int argc, char* argv[]) {
 	printf("[x, y] = [%d, %d] \n", frame.rows, frame.cols);
 	imshow("Frame", frame);
 
+
+	printf("(ASDASD)\n");
 	test_canny(frame);
 
+	printf("(ASDASD)\n");
 	test_sobel(frame);
 
 //	test_gaussian_pyramid(frame);

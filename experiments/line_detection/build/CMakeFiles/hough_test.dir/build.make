@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/forat/Desktop/unik4690/Machinevision---Self-driving-car/line_detection
+CMAKE_SOURCE_DIR = /home/hm/unik4960/Machinevision-Selfdrivingcar/experiments/line_detection
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/forat/Desktop/unik4690/Machinevision---Self-driving-car/line_detection/build
+CMAKE_BINARY_DIR = /home/hm/unik4960/Machinevision-Selfdrivingcar/experiments/line_detection/build
 
 # Include any dependencies generated for this target.
 include CMakeFiles/hough_test.dir/depend.make
@@ -59,16 +59,16 @@ include CMakeFiles/hough_test.dir/flags.make
 
 CMakeFiles/hough_test.dir/hough_test.cpp.o: CMakeFiles/hough_test.dir/flags.make
 CMakeFiles/hough_test.dir/hough_test.cpp.o: ../hough_test.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/forat/Desktop/unik4690/Machinevision---Self-driving-car/line_detection/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/hough_test.dir/hough_test.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/hough_test.dir/hough_test.cpp.o -c /home/forat/Desktop/unik4690/Machinevision---Self-driving-car/line_detection/hough_test.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/hm/unik4960/Machinevision-Selfdrivingcar/experiments/line_detection/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/hough_test.dir/hough_test.cpp.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/hough_test.dir/hough_test.cpp.o -c /home/hm/unik4960/Machinevision-Selfdrivingcar/experiments/line_detection/hough_test.cpp
 
 CMakeFiles/hough_test.dir/hough_test.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/hough_test.dir/hough_test.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/forat/Desktop/unik4690/Machinevision---Self-driving-car/line_detection/hough_test.cpp > CMakeFiles/hough_test.dir/hough_test.cpp.i
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/hm/unik4960/Machinevision-Selfdrivingcar/experiments/line_detection/hough_test.cpp > CMakeFiles/hough_test.dir/hough_test.cpp.i
 
 CMakeFiles/hough_test.dir/hough_test.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/hough_test.dir/hough_test.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/forat/Desktop/unik4690/Machinevision---Self-driving-car/line_detection/hough_test.cpp -o CMakeFiles/hough_test.dir/hough_test.cpp.s
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/hm/unik4960/Machinevision-Selfdrivingcar/experiments/line_detection/hough_test.cpp -o CMakeFiles/hough_test.dir/hough_test.cpp.s
 
 CMakeFiles/hough_test.dir/hough_test.cpp.o.requires:
 
@@ -90,53 +90,25 @@ hough_test_EXTERNAL_OBJECTS =
 
 hough_test: CMakeFiles/hough_test.dir/hough_test.cpp.o
 hough_test: CMakeFiles/hough_test.dir/build.make
-hough_test: /opt/ros/kinetic/lib/x86_64-linux-gnu/libopencv_stitching3.so.3.3.1
-hough_test: /opt/ros/kinetic/lib/x86_64-linux-gnu/libopencv_superres3.so.3.3.1
-hough_test: /opt/ros/kinetic/lib/x86_64-linux-gnu/libopencv_videostab3.so.3.3.1
-hough_test: /opt/ros/kinetic/lib/x86_64-linux-gnu/libopencv_aruco3.so.3.3.1
-hough_test: /opt/ros/kinetic/lib/x86_64-linux-gnu/libopencv_bgsegm3.so.3.3.1
-hough_test: /opt/ros/kinetic/lib/x86_64-linux-gnu/libopencv_bioinspired3.so.3.3.1
-hough_test: /opt/ros/kinetic/lib/x86_64-linux-gnu/libopencv_ccalib3.so.3.3.1
-hough_test: /opt/ros/kinetic/lib/x86_64-linux-gnu/libopencv_cvv3.so.3.3.1
-hough_test: /opt/ros/kinetic/lib/x86_64-linux-gnu/libopencv_dpm3.so.3.3.1
-hough_test: /opt/ros/kinetic/lib/x86_64-linux-gnu/libopencv_face3.so.3.3.1
-hough_test: /opt/ros/kinetic/lib/x86_64-linux-gnu/libopencv_fuzzy3.so.3.3.1
-hough_test: /opt/ros/kinetic/lib/x86_64-linux-gnu/libopencv_hdf3.so.3.3.1
-hough_test: /opt/ros/kinetic/lib/x86_64-linux-gnu/libopencv_img_hash3.so.3.3.1
-hough_test: /opt/ros/kinetic/lib/x86_64-linux-gnu/libopencv_line_descriptor3.so.3.3.1
-hough_test: /opt/ros/kinetic/lib/x86_64-linux-gnu/libopencv_optflow3.so.3.3.1
-hough_test: /opt/ros/kinetic/lib/x86_64-linux-gnu/libopencv_reg3.so.3.3.1
-hough_test: /opt/ros/kinetic/lib/x86_64-linux-gnu/libopencv_rgbd3.so.3.3.1
-hough_test: /opt/ros/kinetic/lib/x86_64-linux-gnu/libopencv_saliency3.so.3.3.1
-hough_test: /opt/ros/kinetic/lib/x86_64-linux-gnu/libopencv_stereo3.so.3.3.1
-hough_test: /opt/ros/kinetic/lib/x86_64-linux-gnu/libopencv_structured_light3.so.3.3.1
-hough_test: /opt/ros/kinetic/lib/x86_64-linux-gnu/libopencv_surface_matching3.so.3.3.1
-hough_test: /opt/ros/kinetic/lib/x86_64-linux-gnu/libopencv_tracking3.so.3.3.1
-hough_test: /opt/ros/kinetic/lib/x86_64-linux-gnu/libopencv_xfeatures2d3.so.3.3.1
-hough_test: /opt/ros/kinetic/lib/x86_64-linux-gnu/libopencv_ximgproc3.so.3.3.1
-hough_test: /opt/ros/kinetic/lib/x86_64-linux-gnu/libopencv_xobjdetect3.so.3.3.1
-hough_test: /opt/ros/kinetic/lib/x86_64-linux-gnu/libopencv_xphoto3.so.3.3.1
-hough_test: /opt/ros/kinetic/lib/x86_64-linux-gnu/libopencv_shape3.so.3.3.1
-hough_test: /opt/ros/kinetic/lib/x86_64-linux-gnu/libopencv_photo3.so.3.3.1
-hough_test: /opt/ros/kinetic/lib/x86_64-linux-gnu/libopencv_datasets3.so.3.3.1
-hough_test: /opt/ros/kinetic/lib/x86_64-linux-gnu/libopencv_plot3.so.3.3.1
-hough_test: /opt/ros/kinetic/lib/x86_64-linux-gnu/libopencv_text3.so.3.3.1
-hough_test: /opt/ros/kinetic/lib/x86_64-linux-gnu/libopencv_dnn3.so.3.3.1
-hough_test: /opt/ros/kinetic/lib/x86_64-linux-gnu/libopencv_ml3.so.3.3.1
-hough_test: /opt/ros/kinetic/lib/x86_64-linux-gnu/libopencv_video3.so.3.3.1
-hough_test: /opt/ros/kinetic/lib/x86_64-linux-gnu/libopencv_calib3d3.so.3.3.1
-hough_test: /opt/ros/kinetic/lib/x86_64-linux-gnu/libopencv_features2d3.so.3.3.1
-hough_test: /opt/ros/kinetic/lib/x86_64-linux-gnu/libopencv_highgui3.so.3.3.1
-hough_test: /opt/ros/kinetic/lib/x86_64-linux-gnu/libopencv_videoio3.so.3.3.1
-hough_test: /opt/ros/kinetic/lib/x86_64-linux-gnu/libopencv_viz3.so.3.3.1
-hough_test: /opt/ros/kinetic/lib/x86_64-linux-gnu/libopencv_phase_unwrapping3.so.3.3.1
-hough_test: /opt/ros/kinetic/lib/x86_64-linux-gnu/libopencv_flann3.so.3.3.1
-hough_test: /opt/ros/kinetic/lib/x86_64-linux-gnu/libopencv_imgcodecs3.so.3.3.1
-hough_test: /opt/ros/kinetic/lib/x86_64-linux-gnu/libopencv_objdetect3.so.3.3.1
-hough_test: /opt/ros/kinetic/lib/x86_64-linux-gnu/libopencv_imgproc3.so.3.3.1
-hough_test: /opt/ros/kinetic/lib/x86_64-linux-gnu/libopencv_core3.so.3.3.1
+hough_test: /usr/local/lib/libopencv_ml.so.4.0.0
+hough_test: /usr/local/lib/libopencv_dnn.so.4.0.0
+hough_test: /usr/local/lib/libopencv_superres.so.4.0.0
+hough_test: /usr/local/lib/libopencv_stitching.so.4.0.0
+hough_test: /usr/local/lib/libopencv_shape.so.4.0.0
+hough_test: /usr/local/lib/libopencv_objdetect.so.4.0.0
+hough_test: /usr/local/lib/libopencv_videostab.so.4.0.0
+hough_test: /usr/local/lib/libopencv_photo.so.4.0.0
+hough_test: /usr/local/lib/libopencv_calib3d.so.4.0.0
+hough_test: /usr/local/lib/libopencv_video.so.4.0.0
+hough_test: /usr/local/lib/libopencv_features2d.so.4.0.0
+hough_test: /usr/local/lib/libopencv_flann.so.4.0.0
+hough_test: /usr/local/lib/libopencv_highgui.so.4.0.0
+hough_test: /usr/local/lib/libopencv_videoio.so.4.0.0
+hough_test: /usr/local/lib/libopencv_imgcodecs.so.4.0.0
+hough_test: /usr/local/lib/libopencv_imgproc.so.4.0.0
+hough_test: /usr/local/lib/libopencv_core.so.4.0.0
 hough_test: CMakeFiles/hough_test.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/forat/Desktop/unik4690/Machinevision---Self-driving-car/line_detection/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable hough_test"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/hm/unik4960/Machinevision-Selfdrivingcar/experiments/line_detection/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable hough_test"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/hough_test.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -153,6 +125,6 @@ CMakeFiles/hough_test.dir/clean:
 .PHONY : CMakeFiles/hough_test.dir/clean
 
 CMakeFiles/hough_test.dir/depend:
-	cd /home/forat/Desktop/unik4690/Machinevision---Self-driving-car/line_detection/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/forat/Desktop/unik4690/Machinevision---Self-driving-car/line_detection /home/forat/Desktop/unik4690/Machinevision---Self-driving-car/line_detection /home/forat/Desktop/unik4690/Machinevision---Self-driving-car/line_detection/build /home/forat/Desktop/unik4690/Machinevision---Self-driving-car/line_detection/build /home/forat/Desktop/unik4690/Machinevision---Self-driving-car/line_detection/build/CMakeFiles/hough_test.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/hm/unik4960/Machinevision-Selfdrivingcar/experiments/line_detection/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/hm/unik4960/Machinevision-Selfdrivingcar/experiments/line_detection /home/hm/unik4960/Machinevision-Selfdrivingcar/experiments/line_detection /home/hm/unik4960/Machinevision-Selfdrivingcar/experiments/line_detection/build /home/hm/unik4960/Machinevision-Selfdrivingcar/experiments/line_detection/build /home/hm/unik4960/Machinevision-Selfdrivingcar/experiments/line_detection/build/CMakeFiles/hough_test.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/hough_test.dir/depend
 

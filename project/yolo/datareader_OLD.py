@@ -92,7 +92,6 @@ def frames2data(img, data, grid_size, anchors):
     ch = int(img_shape[0]/grid_size[0])
     cw = int(img_shape[1]/grid_size[1])
 
-    fack = len(data)
     data = np.matrix(data, np.float64)
 
     # get anchor number
@@ -113,70 +112,66 @@ def frames2data(img, data, grid_size, anchors):
             # get cell cell from img
             cell = img[y0:y1, x0:x1]
 
+            # extract relevant bboxes for cell
+            a = np.logical_and(x0+1 <= data[:,0], data[:,0] <= x1)
+            b = np.logical_and(y0+1 <= data[:,1], data[:,1] <= y1)
+            i_map  = np.where(np.logical_and(a, b)) # index map over booleans
+            bboxes = data[i_map[0],:]
+
+            # normalize data relative to cell
+            bboxes[:, 0] = (bboxes[:, 0] - x0) / cw
+            bboxes[:, 1] = (bboxes[:, 1] - y0) / ch
+            bboxes[:, 2] /= cw
+            bboxes[:, 3] /= ch
+
+            # add column of ones to bboxes
+            bboxes = np.hstack([np.matrix(np.ones((bboxes.shape[0],1))), bboxes])
+
             # prep label tensor
             label = np.zeros(label_len)
 
-            if fack > 0:
-                # extract relevant bboxes for cell
-                a = np.logical_and(x0+1 <= data[:,0], data[:,0] <= x1)
-                b = np.logical_and(y0+1 <= data[:,1], data[:,1] <= y1)
-                i_map  = np.where(np.logical_and(a, b)) # index map over booleans
-                bboxes = data[i_map[0],:]
+            # fill label tensor
+            for bbox in bboxes:
+                iou, iou_index = 0, -1
 
-                # normalize data relative to cell
-                bboxes[:, 0] = (bboxes[:, 0] - x0) / cw
-                bboxes[:, 1] = (bboxes[:, 1] - y0) / ch
-                bboxes[:, 2] /= cw
-                bboxes[:, 3] /= ch
+                for k in range(n_anchors):
+                    anch = anchors[k]
 
-                # add column of ones to bboxes
-                bboxes = np.hstack([np.matrix(np.ones((bboxes.shape[0],1))), bboxes])
+                    intersec_h = 0
+                    intersec_w = 0
 
-                # fill label tensor
-                for bbox in bboxes:
-                    iou, iou_index = 0, -1
+                    #print((bbox[0,3],bbox[0,4]), (anch[0,0],anch[0,1]))
 
-                    for k in range(n_anchors):
-                        anch = anchors[k]
+                    if bbox[0,3] > anch[0,1]:
+                        intersec_w = anch[0,1]
+                    else:
+                        intersec_w = bbox[0,3]
 
-                        intersec_h = 0
-                        intersec_w = 0
+                    if bbox[0,4] > anch[0,0]:
+                        intersec_h = anch[0,0]
+                    else:
+                        intersec_h = bbox[0,4]
 
-                        #print((bbox[0,3],bbox[0,4]), (anch[0,0],anch[0,1]))
+                    intersec = intersec_h * intersec_w
+                    tot_area = bbox[0,3]*bbox[0,4] + anch[0,0]*anch[0,1] - intersec
 
-                        if bbox[0,3] > anch[0,1]:
-                            intersec_w = anch[0,1]
-                        else:
-                            intersec_w = bbox[0,3]
+                    tmp_iou = intersec/tot_area
+                    if tmp_iou > iou:
+                        iou = tmp_iou
+                        iou_index = k
 
-                        if bbox[0,4] > anch[0,0]:
-                            intersec_h = anch[0,0]
-                        else:
-                            intersec_h = bbox[0,4]
+                if iou_index > -1:
+                    label[iou_index*object_len : (iou_index+1)*object_len] = bbox
 
-                        intersec = intersec_h * intersec_w
-                        tot_area = bbox[0,3]*bbox[0,4] + anch[0,0]*anch[0,1] - intersec
-
-                        tmp_iou = intersec/tot_area
-                        if tmp_iou > iou:
-                            iou = tmp_iou
-                            iou_index = k
-
-                    if iou_index > -1:
-                        label[iou_index*object_len : (iou_index+1)*object_len] = bbox
-
-            yield cell, label#, bboxes
+            yield cell, label, bboxes
 
 
 # turns csv file directly into traning data
 def csv2data(filepath, grid_size, anchors, start_frame=None, scale=1):
 
     for img, data in csv2frames(filepath, start_frame, scale):
-        temp = []
- #       for x, y, _ in frames2data(img, data, grid_size, anchors):
-        for x, y in frames2data(img, data, grid_size, anchors):
-             temp.append(y)
-        yield img, temp
+        for x, y, _ in frames2data(img, data, grid_size, anchors):
+            yield x, y
 
 def debug_heavy_read():
     if len(sys.argv) < 2:
@@ -298,7 +293,7 @@ def example():
 
 # main function
 if __name__ == '__main__':
-    example()
+    #example()
     #debug_heavy_read()
 
 

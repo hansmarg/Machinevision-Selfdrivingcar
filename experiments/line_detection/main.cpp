@@ -2,8 +2,8 @@
 #include <iostream>
 //#include "debug_stuff.cpp"
 
-//using namespace cv;
-//using namespace std;
+using namespace cv;
+using namespace std;
 
 //int main(int argc, char** argv)
 int main(int argc, char* argv[])
