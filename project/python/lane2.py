@@ -10,6 +10,7 @@ SCALE=0.5
 
 def main():
     video_path = "../../../dataset/project_video.mp4"
+    #video_path = "/home/forat/Desktop/fackfack.mp4"
 
     # open the video file for reading
     cap = cv2.VideoCapture(video_path)
@@ -40,9 +41,9 @@ def main():
 
     # create source points for polygon and transform
 
-    a = 140*SCALE
-    b = 800*SCALE
-    t_center = np.round(frame_w/2)
+    a = 100*SCALE
+    b = 550*SCALE
+    t_center = np.round(frame_w/2) + 10*SCALE
     t_height = 205*SCALE
     t_y = (frame_h - t_height - 60*SCALE)
 
@@ -57,6 +58,7 @@ def main():
     shapes.fill_polygon(mask, pts_src, (1, 1, 1))
 
     # calculate factor for making simpler color pallatte
+    #color_basis = 64 # change this in case you want less than 256 colors
     color_basis = 256 # change this in case you want less than 256 colors
     color_basis = np.uint8(256/color_basis)
 
@@ -78,21 +80,24 @@ def main():
 
         # get frame
         frame = cv2.resize(frame, None, fx=SCALE, fy=SCALE, interpolation = cv2.INTER_CUBIC) # resize
+        #frame[mask == 0] *= 0
 
         # copy frame to mod it
         mframe = np.copy(frame)
 
         # simplify color basis
+        mframe[mask == 0] *= 0
         mframe = np.round(mframe/color_basis).astype(np.uint8)
         mframe = mframe*color_basis
-        mframe = cv2.bitwise_and(frame, frame, mask=mask)
 
         # find the intencity histogram of the red layer
         red_histo = lanefinder.i_histo(mframe[:,:,2], limit=255, mask=mask)
-        red_histo = np.array(red_histo)/np.max(red_histo)*100
+
+        if np.max(red_histo) > 0:
+            red_histo = np.array(red_histo)/np.max(red_histo)*100
 
         # calculate threshold and threshold x position on plot
-        dth = 10
+        dth = 5
         th, h = lanefinder.dynamic_threshold(red_histo, dth, 245)
         h += dth
 
@@ -109,9 +114,10 @@ def main():
         cv2.line(plot, (th_x,0), (th_x,plot.shape[1]), (255,0,0), 4)
         cv2.line(plot, (static_th_x,0), (static_th_x,plot.shape[1]), (0,255,0), 4)
         cv2.imshow("plot_window", plot)
+
         try:
-            mframe1 = lanefinder.threshold(mframe, np.array([0,0,th]), np.array([255,255,255]), mask=mask)
-            #mframe2 = lanefinder.threshold(mframe, np.array([0,0,static_th]), np.array([255,255,255]),mask=mask)
+            mframe1 = lanefinder.threshold(mframe, np.array([0,0,th]), np.array([255,255,255]))#, mask=mask)
+            mframe2 = lanefinder.threshold(mframe, np.array([0,0,static_th]), np.array([255,255,255]))#,mask=mask)
         except:
             print("Frame crash, internal opencv problem..")
             continue
